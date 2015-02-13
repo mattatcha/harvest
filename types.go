@@ -27,7 +27,7 @@ type Daily struct {
 	Projects []Project
 }
 
-type HarvestClient struct {
+type Client struct {
 	encodedAuth string
 	baseURL     *url.URL
 	client      *http.Client

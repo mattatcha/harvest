@@ -10,7 +10,7 @@ import (
 	"net/url"
 )
 
-func NewHarvestClient(domain, username, password string) (*HarvestClient, error) {
+func NewCient(domain, username, password string) (*Client, error) {
 	base := fmt.Sprint("https://", domain, ".harvestapp.com")
 
 	baseURL, err := url.Parse(base)
@@ -20,7 +20,7 @@ func NewHarvestClient(domain, username, password string) (*HarvestClient, error)
 
 	userPass := fmt.Sprint(username, ":", password)
 	encoded := base64.StdEncoding.EncodeToString([]byte(userPass))
-	return &HarvestClient{
+	return &Client{
 		encodedAuth: encoded,
 		baseURL:     baseURL,
 		client:      &http.Client{},
@@ -28,7 +28,7 @@ func NewHarvestClient(domain, username, password string) (*HarvestClient, error)
 
 }
 
-func (c *HarvestClient) NewRequest(method, path string, body io.Reader) (*http.Request, error) {
+func (c *Client) NewRequest(method, path string, body io.Reader) (*http.Request, error) {
 	url := *c.baseURL
 	url.Path = path
 
@@ -46,11 +46,11 @@ func (c *HarvestClient) NewRequest(method, path string, body io.Reader) (*http.R
 	return req, nil
 }
 
-func (c *HarvestClient) do(request *http.Request) (*http.Response, error) {
+func (c *Client) do(request *http.Request) (*http.Response, error) {
 	return c.client.Do(request)
 }
 
-func (c *HarvestClient) Daily() (*Daily, error) {
+func (c *Client) Daily() (*Daily, error) {
 	req, err := c.NewRequest("GET", "/daily", nil)
 	if err != nil {
 		return nil, err
